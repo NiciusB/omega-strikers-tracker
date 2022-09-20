@@ -13,3 +13,13 @@ const omegaStrikersApi = {
   getRankedLeaderboardPlayers,
 }
 export default omegaStrikersApi
+
+export async function fetchOmegaStrikersApi(uri: string) {
+  return await fetch(API_BASE_URL + uri, {
+    headers: {
+      Accept: "application/json",
+      "User-Agent":
+        "omega-strikers-tracker/1.0 (https://github.com/NiciusB/omega-strikers-tracker)",
+    },
+  }).then((res) => res.json())
+}

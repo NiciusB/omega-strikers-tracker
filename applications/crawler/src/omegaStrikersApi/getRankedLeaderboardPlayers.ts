@@ -1,4 +1,4 @@
-import { API_BASE_URL, OMEGA_STRIKERS_REGIONS } from "./"
+import { fetchOmegaStrikersApi, OMEGA_STRIKERS_REGIONS } from "./"
 
 export const RANKED_LEADERBOARD_PLAYERS_TOTAL_ITEMS = 10000
 
@@ -17,11 +17,9 @@ export async function getRankedLeaderboardPlayers(
     searchParams.specificRegion = options.specificRegion
   }
 
-  return await fetch(
-    API_BASE_URL +
-      "ranked/leaderboard/players?" +
-      new URLSearchParams(searchParams)
-  ).then((res) => res.json())
+  return await fetchOmegaStrikersApi(
+    "ranked/leaderboard/players?" + new URLSearchParams(searchParams)
+  )
 }
 
 /*
