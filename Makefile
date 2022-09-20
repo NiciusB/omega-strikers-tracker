@@ -1,7 +1,7 @@
 dev:
 	yarn install --cwd "applications/crawler"
 	yarn install --cwd "applications/api"
-	docker-compose up
+	docker compose up
 
 up-prod:
-	docker-compose -f docker-compose.prod.yml up -d
+	docker compose -f docker-compose.prod.yml up -d
