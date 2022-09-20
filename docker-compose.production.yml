@@ -1,7 +1,9 @@
 version: "3.9"
 services:
-  ts-node-docker:
+  crawler:
     build:
+      context: applications/crawler
+      dockerfile: Dockerfile
       target: production
     command: node build/index.js
   mongo:

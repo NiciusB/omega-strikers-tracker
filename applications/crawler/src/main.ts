@@ -5,7 +5,7 @@ import crawlRankedLeaderboardPlayers from "./cron/crawlRankedLeaderboardPlayers"
 export default async function main() {
   await ensurePlayersIndexes()
 
-  cron.schedule("* * * * *", crawlRankedLeaderboardPlayers)
+  cron.schedule("23 * * * * *", crawlRankedLeaderboardPlayers)
 }
 
 async function ensurePlayersIndexes() {

@@ -1,12 +1,12 @@
 version: "3.9"
 services:
-  ts-node-docker:
+  crawler:
     build:
-      context: .
+      context: applications/crawler
       dockerfile: Dockerfile
       target: base
     volumes:
-      - ./:/home/node/app
+      - ./applications/crawler:/home/node/app
     container_name: ts-node-docker
     command: npm run dev
   mongo:
