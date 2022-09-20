@@ -5,13 +5,13 @@ services:
         context: applications/crawler
         dockerfile: Dockerfile
         target: production
-      command: node build/index.js
+      command: node build/src/index.js
   api:
       build:
         context: applications/api
         dockerfile: Dockerfile
         target: production
-      command: node build/index.js
+      command: node build/src/index.js
       ports:
         - '1780:80'
   mongo:
@@ -20,3 +20,4 @@ services:
         - ./mongodb_data:/data/db
       ports:
         - '27018:27017'
+      command: mongod --quiet
