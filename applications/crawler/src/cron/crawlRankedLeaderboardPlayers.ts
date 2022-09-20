@@ -22,7 +22,7 @@ export default async function crawlRankedLeaderboardPlayers() {
     result.players.map(async (player) => {
       await dbCollections.players.updateOne(
         {
-          playerId: player.playerId,
+          "rankedLeaderboardData.playerId": player.playerId,
         },
         {
           $set: {

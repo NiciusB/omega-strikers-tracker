@@ -1,3 +1,18 @@
+import express from "express"
+import { graphqlHTTP } from "express-graphql"
+import graphQLRootValue from "./graphQLRootValue"
+import graphQLSchema from "./graphQLSchema"
+
 export default async function main() {
-  console.log("up")
+  const app = express()
+  app.use(
+    "/graphql",
+    graphqlHTTP({
+      schema: graphQLSchema,
+      rootValue: graphQLRootValue,
+      graphiql: true,
+    })
+  )
+  app.listen(80)
+  console.log("Running a GraphQL API server at http://localhost:1780/graphql")
 }

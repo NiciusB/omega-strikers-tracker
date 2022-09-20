@@ -1,14 +1,23 @@
 version: "3.9"
 services:
   crawler:
-    build:
-      context: applications/crawler
-      dockerfile: Dockerfile
-      target: base
-    volumes:
-      - ./applications/crawler:/home/node/app
-    container_name: ts-node-docker
-    command: npm run dev
+      build:
+        context: applications/crawler
+        dockerfile: Dockerfile
+        target: base
+      volumes:
+        - ./applications/crawler:/home/node/app
+      command: yarn dev
+  api:
+      build:
+        context: applications/api
+        dockerfile: Dockerfile
+        target: base
+      volumes:
+        - ./applications/api:/home/node/app
+      ports:
+        - '1780:80'
+      command: yarn dev
   mongo:
       image: mongo
       volumes:
