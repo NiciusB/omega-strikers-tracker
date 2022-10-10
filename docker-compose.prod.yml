@@ -1,22 +1,38 @@
 version: "3.9"
+
 services:
   crawler:
+      restart: unless-stopped
       build:
         context: applications/crawler
         dockerfile: Dockerfile
         target: production
-      command: node build/src/index.js
+      ports:
+        - '1782:80'
+      command: yarn serve
   api:
+      restart: unless-stopped
       build:
         context: applications/api
         dockerfile: Dockerfile
         target: production
-      command: node build/src/index.js
+      command: yarn serve
       ports:
         - '1780:80'
+  client:
+      restart: unless-stopped
+      build:
+        context: applications/client
+        dockerfile: Dockerfile
+        target: production
+      command: yarn serve --port 80 --host
+      ports:
+        - '1781:80'
   mongo:
+      restart: unless-stopped
       image: mongo
       volumes:
+        - ./mongodb_config:/data/configdb
         - ./mongodb_data:/data/db
       ports:
         - '27018:27017'

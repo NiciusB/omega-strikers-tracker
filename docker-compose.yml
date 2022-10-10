@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   crawler:
       build:
@@ -6,7 +7,9 @@ services:
         dockerfile: Dockerfile
         target: base
       volumes:
-        - ./applications/crawler:/home/node/app
+        - ./applications/crawler/src:/home/node/app/src
+      ports:
+        - '1782:80'
       command: yarn dev
   api:
       build:
@@ -14,13 +17,24 @@ services:
         dockerfile: Dockerfile
         target: base
       volumes:
-        - ./applications/api:/home/node/app
+        - ./applications/api/src:/home/node/app/src
       ports:
         - '1780:80'
       command: yarn dev
+  client:
+      build:
+        context: applications/client
+        dockerfile: Dockerfile
+        target: base
+      volumes:
+        - ./applications/client/src:/home/node/app/src
+      ports:
+        - '1781:80'
+      command: yarn dev --port 80 --host
   mongo:
       image: mongo
       volumes:
+        - ./mongodb_config:/data/configdb
         - ./mongodb_data:/data/db
       ports:
         - '27018:27017'
