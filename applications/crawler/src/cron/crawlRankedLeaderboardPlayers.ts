@@ -15,7 +15,7 @@ export default async function crawlRankedLeaderboardPlayers() {
 
   const result = await omegaStrikersApi.getRankedLeaderboardPlayers({
     pageSize: PAGE_SIZE,
-    startRank: page * PAGE_SIZE,
+    startRank: (page - 1) * PAGE_SIZE,
   })
 
   await Promise.all(
