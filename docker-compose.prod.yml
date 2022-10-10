@@ -7,8 +7,6 @@ services:
         context: applications/crawler
         dockerfile: Dockerfile
         target: production
-      ports:
-        - '1782:80'
       command: yarn serve
   api:
       restart: unless-stopped

@@ -1,10 +1,12 @@
 import express from "express"
+import cors from "cors"
 import { graphqlHTTP } from "express-graphql"
 import graphQLRootValue from "./graphQLRootValue"
 import graphQLSchema from "./graphQLSchema"
 
 export default async function main() {
   const app = express()
+  app.use(cors())
   app.use(
     "/graphql",
     graphqlHTTP({
