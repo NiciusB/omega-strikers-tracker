@@ -1,6 +1,8 @@
 import { gql } from "graphql-request"
 import { createSignal, onMount } from "solid-js"
 import apiClient from "../apiClient"
+import TopCharacter from "../components/TopCharacter"
+import styles from "./RomeRoute.module.css"
 
 namespace QueryResult {
   export interface Player {
@@ -13,6 +15,9 @@ namespace QueryResult {
     rank: string
     mostPlayedCharacters: MostPlayedCharacters[]
     topRole: string
+    wins: number
+    losses: number
+    rating: number
   }
   interface MostPlayedCharacters {
     characterId: string
@@ -29,29 +34,14 @@ const query = gql`
     players {
       rankedLeaderboardData {
         username
-        playerId
-        logoId
-        title
-        nameplateId
-        emoticonId
-        titleId
         rank
         wins
         losses
-        games
         topRole
         rating
-        currentDivisionId
-        progressToNext
         mostPlayedCharacters {
           characterId
           gamesPlayed
-        }
-        tags
-        organization {
-          organizationId
-          logoId
-          name
         }
       }
       createdAt
@@ -70,8 +60,22 @@ export default function HomeRoute() {
     try {
       const res = await apiClient.request<QueryResult.Result>(query)
 
+      const parsedResult: { [key: string]: QueryResult.Player } = {}
+
+      res.players.forEach((player) => {
+        if (parsedResult[player.rankedLeaderboardData.rank] === undefined) {
+          parsedResult[player.rankedLeaderboardData.rank] = player
+        } else if (
+          // Use latest updated
+          parsedResult[player.rankedLeaderboardData.rank].updatedAt <
+          player.updatedAt
+        ) {
+          parsedResult[player.rankedLeaderboardData.rank] = player
+        }
+      })
+
       setLeaderboardResult(
-        res.players.sort((a, b) =>
+        Object.values(parsedResult).sort((a, b) =>
           a.rankedLeaderboardData.rank > b.rankedLeaderboardData.rank ? 1 : -1
         )
       )
@@ -82,7 +86,7 @@ export default function HomeRoute() {
 
   return (
     <>
-      <h1>Omega Strikers Tracker</h1>
+      <h1>Omega Strikers Global Leaderboard</h1>
 
       {error !== null && error}
 
@@ -90,29 +94,53 @@ export default function HomeRoute() {
 
       {leaderboardResult()?.length === 0 && "No data found"}
 
-      <table>
+      <table class={styles.table}>
         <thead>
           <tr>
-            <th>Username</th>
             <th>Rank</th>
+            <th>Username</th>
+            <th>Rating</th>
+            <th>Winrate</th>
             <th>Top Role</th>
-            <th>Top Character</th>
+            <th>Top Characters</th>
           </tr>
         </thead>
         <tbody>
-          {leaderboardResult()?.map((user) => (
-            <tr>
-              <td>{user.rankedLeaderboardData.username}</td>
-              <td>{user.rankedLeaderboardData.rank}</td>
-              <td>{user.rankedLeaderboardData.topRole}</td>
-              <td>
-                {
-                  user.rankedLeaderboardData.mostPlayedCharacters?.[0]
-                    ?.characterId
-                }
-              </td>
-            </tr>
-          ))}
+          {leaderboardResult()?.map((user) => {
+            const mostPlayed =
+              user.rankedLeaderboardData.mostPlayedCharacters.slice(0, 2)
+            return (
+              <tr>
+                <td>{user.rankedLeaderboardData.rank}</td>
+                <td>{user.rankedLeaderboardData.username}</td>
+                <td>{user.rankedLeaderboardData.rating}</td>
+                <td>
+                  <p>
+                    {user.rankedLeaderboardData.wins} /{" "}
+                    {user.rankedLeaderboardData.losses}
+                  </p>
+                  <p>
+                    {Math.round(
+                      (user.rankedLeaderboardData.wins /
+                        (user.rankedLeaderboardData.losses +
+                          user.rankedLeaderboardData.wins)) *
+                        100
+                    )}
+                    %
+                  </p>
+                </td>
+                <td>{user.rankedLeaderboardData.topRole}</td>
+                <td>
+                  {mostPlayed.map((mp) => (
+                    <TopCharacter
+                      characterId={mp.characterId}
+                      gamesPlayed={mp.gamesPlayed}
+                    />
+                  ))}
+                </td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     </>

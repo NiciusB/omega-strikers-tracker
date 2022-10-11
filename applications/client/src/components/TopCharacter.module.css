@@ -1,0 +1,26 @@
+.characterAvatarImg {
+  vertical-align: middle;
+  margin-right: 0.5em;
+  width: 36px;
+  height: 36px;
+  border-radius: 2px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.container:not(:last-child) {
+  margin-bottom: 0.25em;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.textContainer p {
+  margin: 0.2em 0;
+}

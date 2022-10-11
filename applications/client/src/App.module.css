@@ -4,12 +4,12 @@
   z-index: 2;
   width: 100%;
   max-width: 1024px;
+  overflow-x: auto;
   margin: auto;
   background: rgba(68,67,73,.9);
   box-shadow: 0 0 4px #212123;
   min-height: 100vh;
   padding: 20px;
-
   color: #fafafa;
 }
 
