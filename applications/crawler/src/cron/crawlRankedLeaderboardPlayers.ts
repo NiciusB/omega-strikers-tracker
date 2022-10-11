@@ -3,9 +3,8 @@ import { dbCollections } from "../db"
 import { RANKED_LEADERBOARD_PLAYERS_TOTAL_ITEMS } from "../omegaStrikersApi/getRankedLeaderboardPlayers"
 
 const PAGE_SIZE = 25
-const TOTAL_PAGES = Math.ceil(
-  RANKED_LEADERBOARD_PLAYERS_TOTAL_ITEMS / PAGE_SIZE
-)
+const TOTAL_PAGES =
+  Math.ceil(RANKED_LEADERBOARD_PLAYERS_TOTAL_ITEMS / PAGE_SIZE) + 1
 
 export default async function crawlRankedLeaderboardPlayers() {
   const page = await getCrawlProgressNextPage()
